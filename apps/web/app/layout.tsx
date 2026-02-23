@@ -48,19 +48,19 @@ export const metadata: Metadata = {
 		locale: "en_US",
 		images: [
 			{
-				url: "/botcha-icon.png",
-				width: 128,
-				height: 128,
+				url: "/og-image.png",
+				width: 1200,
+				height: 630,
 				alt: "BOTCHA — Inverted CAPTCHA for AI Agents",
 			},
 		],
 	},
 	twitter: {
-		card: "summary",
+		card: "summary_large_image",
 		title: "BOTCHA — Prove You're an Agent",
 		description:
 			"An inverted CAPTCHA that keeps humans out. Only AI agents with runtime cryptography can pass.",
-		images: ["/botcha-icon.png"],
+		images: ["/og-image.png"],
 		creator: "@satyajitghana",
 	},
 	alternates: {

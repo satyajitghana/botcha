@@ -11,6 +11,10 @@ Built with **Next.js 16** + **Vercel** with **Redis** for session storage (Upsta
 
 ---
 
+![BOTCHA Screenshot](./screenshot.png)
+
+---
+
 ## How It Works
 
 Every challenge consists of:
