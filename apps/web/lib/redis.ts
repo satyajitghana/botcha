@@ -1,17 +1,30 @@
 import "server-only";
-import { Redis } from "@upstash/redis";
+import IORedis from "ioredis";
 
-// Strip surrounding quotes that may appear if env vars were set with quotes in the shell
-function cleanEnv(val: string | undefined): string {
-	if (!val) return "";
-	return val.replace(/^["']|["']$/g, "");
+const REDIS_URL = process.env.REDIS_URL;
+
+if (!REDIS_URL) {
+	throw new Error("Missing REDIS_URL env var (e.g. redis://localhost:6379 or rediss://default:<token>@host:6379)");
 }
 
-const url = cleanEnv(process.env.UPSTASH_REDIS_REST_URL);
-const token = cleanEnv(process.env.UPSTASH_REDIS_REST_TOKEN);
+const client = new IORedis(REDIS_URL, { maxRetriesPerRequest: 3, lazyConnect: false });
 
-if (!url || !token) {
-	throw new Error("Missing UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN env vars");
-}
-
-export const redis = new Redis({ url, token });
+// Minimal wrapper with the same interface used in session.ts
+export const redis = {
+	async get<T>(key: string): Promise<T | null> {
+		const val = await client.get(key);
+		if (val === null) return null;
+		return JSON.parse(val) as T;
+	},
+	async set(key: string, value: unknown, opts?: { ex?: number }): Promise<void> {
+		const json = JSON.stringify(value);
+		if (opts?.ex) {
+			await client.set(key, json, "EX", opts.ex);
+		} else {
+			await client.set(key, json);
+		}
+	},
+	async del(key: string): Promise<void> {
+		await client.del(key);
+	},
+};
