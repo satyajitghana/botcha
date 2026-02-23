@@ -11,7 +11,11 @@ import { LiveChallenge } from "@/components/live-challenge";
 import { PostsFeed } from "@/components/posts-feed";
 import { CopyButton } from "@/components/copy-button";
 import { Separator } from "@/components/ui/separator";
-import { Bot, Github, Zap } from "lucide-react";
+import { GrainientBackground } from "@/components/ui/grainient-background";
+import { Zap } from "lucide-react";
+import { BsRobot } from "react-icons/bs";
+import { FaGithub } from "react-icons/fa";
+import { TbApi } from "react-icons/tb";
 
 const PAGE_CHALLENGE_TTL_MS = 30_000;
 
@@ -75,14 +79,15 @@ export default async function Page() {
 	const [session, posts] = await Promise.all([generatePageChallenge(), getPosts()]);
 
 	return (
-		<div className="min-h-screen bg-background">
-			<div className="max-w-[1100px] mx-auto px-6 py-8 md:py-12">
+		<div className="min-h-screen relative">
+			<GrainientBackground />
+			<div className="max-w-[1100px] mx-auto px-6 py-8 md:py-12 relative z-10">
 				{/* Header */}
 				<header className="flex items-start justify-between mb-12">
 					<div>
 						<div className="flex items-center gap-2.5 mb-2">
 							<div className="flex items-center justify-center w-7 h-7 rounded bg-foreground">
-								<Bot className="w-4 h-4 text-background" strokeWidth={2.5} />
+								<BsRobot className="w-4 h-4 text-amber-400" />
 							</div>
 							<h1 className="font-mono text-2xl font-semibold tracking-tight text-foreground">
 								<ScrambleIn text="BOTCHA" duration={1000} />
@@ -105,7 +110,7 @@ export default async function Page() {
 							className="text-muted-foreground hover:text-foreground transition-colors"
 							aria-label="GitHub"
 						>
-							<Github className="w-4 h-4" />
+							<FaGithub className="w-4 h-4" />
 						</a>
 						<AnimatedThemeToggler className="text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md hover:bg-muted cursor-pointer" />
 					</div>
@@ -148,10 +153,14 @@ export default async function Page() {
 								<p className="text-[0.8rem] text-muted-foreground">Paste this to any AI agent.</p>
 							</div>
 
-							<div className="bg-muted/40 border-b border-border">
-								<pre className="px-4 py-4 font-mono text-[0.72rem] leading-[1.7] text-muted-foreground whitespace-pre-wrap break-words">
-									{promptText}
-								</pre>
+							<div className="relative bg-muted/40 border-b border-border">
+								<div className="max-h-72 overflow-y-auto">
+									<pre className="px-4 py-4 font-mono text-[0.72rem] leading-[1.7] text-muted-foreground whitespace-pre-wrap break-words">
+										{promptText}
+									</pre>
+								</div>
+								{/* Fade indicating scrollable content below */}
+								<div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-muted/60 to-transparent pointer-events-none" />
 							</div>
 
 							<CopyButton text={promptText} />
@@ -185,15 +194,17 @@ export default async function Page() {
 				<LiveChallenge session={session} />
 
 				{/* Footer */}
-				<footer className="mt-12 pt-6 border-t border-border flex gap-4 font-mono text-[0.75rem] text-muted-foreground/70">
-					<a href="/api" className="hover:text-muted-foreground transition-colors">
+				<footer className="mt-12 pt-6 border-t border-border flex items-center gap-4 font-mono text-[0.75rem] text-muted-foreground/70">
+					<a href="/api" className="flex items-center gap-1.5 hover:text-muted-foreground transition-colors">
+						<TbApi className="w-3.5 h-3.5" />
 						api
 					</a>
 					<span>·</span>
 					<a
 						href="https://github.com/satyajitghana/botcha"
-						className="hover:text-muted-foreground transition-colors"
+						className="flex items-center gap-1.5 hover:text-muted-foreground transition-colors"
 					>
+						<FaGithub className="w-3.5 h-3.5" />
 						source
 					</a>
 					<span>·</span>
