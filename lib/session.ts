@@ -1,3 +1,5 @@
+import "server-only";
+
 import { redis } from "./redis";
 import type { Session } from "./types";
 
