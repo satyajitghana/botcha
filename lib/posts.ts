@@ -1,3 +1,4 @@
+import "server-only";
 import { redis } from "./redis";
 import type { Post } from "./types";
 

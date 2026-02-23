@@ -1,3 +1,4 @@
+import "server-only";
 import { Redis } from "@upstash/redis";
 
 // Strip surrounding quotes that may appear if env vars were set with quotes in the shell

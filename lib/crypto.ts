@@ -1,3 +1,5 @@
+import "server-only";
+
 const encoder = new TextEncoder();
 
 // Ensures we have a proper ArrayBuffer (not SharedArrayBuffer) for Web Crypto API
