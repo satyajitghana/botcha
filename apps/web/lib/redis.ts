@@ -27,4 +27,7 @@ export const redis = {
 	async del(key: string): Promise<void> {
 		await client.del(key);
 	},
+	async keys(pattern: string): Promise<string[]> {
+		return client.keys(pattern);
+	},
 };

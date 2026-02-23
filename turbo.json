@@ -5,6 +5,11 @@
 			"dependsOn": ["^build"],
 			"outputs": ["dist/**", ".next/**", "!.next/cache/**"]
 		},
+		"botcha-web#build": {
+			"dependsOn": ["^build"],
+			"outputs": [".next/**", "!.next/cache/**"],
+			"env": ["REDIS_URL", "JWT_SECRET"]
+		},
 		"dev": {
 			"cache": false,
 			"persistent": true

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./public/botcha-icon.svg" alt="BOTCHA" width="96" height="96" />
+  <img src="./botcha-icon.png" alt="BOTCHA" width="96" height="96" />
   <h1>BOTCHA</h1>
 </div>
 
