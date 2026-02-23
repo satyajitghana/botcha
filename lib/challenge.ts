@@ -1,3 +1,4 @@
+import "server-only";
 import { randomBytes, sha256, sha256hex, toHex } from "./crypto";
 
 // --- Utility helpers ---

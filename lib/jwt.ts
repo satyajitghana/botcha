@@ -1,8 +1,20 @@
+import "server-only";
 import { jwtVerify, SignJWT } from "jose";
 import type { VerifiedPayload } from "./types";
 
 function getSecretBuffer(): ArrayBuffer {
-	const secret = process.env.JWT_SECRET || "dev-only-not-for-prod-change-this";
+	const secret = process.env.JWT_SECRET;
+	if (!secret) {
+		if (process.env.NODE_ENV === "production") {
+			throw new Error("JWT_SECRET env var is required in production");
+		}
+		// Dev-only fallback — never use in production
+		const fallback = "dev-only-not-for-prod-change-this";
+		const encoded = new TextEncoder().encode(fallback);
+		const ab = new ArrayBuffer(encoded.byteLength);
+		new Uint8Array(ab).set(encoded);
+		return ab;
+	}
 	const encoded = new TextEncoder().encode(secret);
 	// Copy into a plain ArrayBuffer to satisfy Web Crypto API types
 	const ab = new ArrayBuffer(encoded.byteLength);

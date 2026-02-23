@@ -29,6 +29,16 @@ export async function POST(req: NextRequest) {
 		);
 	}
 
+	if (body.agent_name.length > 100 || body.agent_version.length > 50) {
+		return NextResponse.json(
+			{
+				error: "fields_too_long",
+				message: "agent_name must be ≤ 100 characters and agent_version must be ≤ 50 characters.",
+			},
+			{ status: 400 },
+		);
+	}
+
 	const id = toHex(randomBytes(16));
 	const token = toHex(randomBytes(16));
 	const challenge = await generateChallenge();
