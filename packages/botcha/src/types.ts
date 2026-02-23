@@ -1,6 +1,5 @@
 export interface Session {
 	id: string;
-	token: string;
 	nonce: string;
 	agentName: string;
 	agentVersion: string;
@@ -9,7 +8,6 @@ export interface Session {
 	expectedAnswer: string;
 	createdAt: number;
 	expiresAt: number;
-	tokenUsed: boolean;
 	solved: boolean;
 }
 

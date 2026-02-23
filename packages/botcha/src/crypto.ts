@@ -1,5 +1,3 @@
-import "server-only";
-
 const encoder = new TextEncoder();
 
 // Ensures we have a proper ArrayBuffer (not SharedArrayBuffer) for Web Crypto API
@@ -37,6 +35,8 @@ export async function hmacSha256hex(key: string, message: string): Promise<strin
 		["sign"],
 	);
 	const msgData = encoder.encode(message);
-	const sig = new Uint8Array(await crypto.subtle.sign("HMAC", cryptoKey, toArrayBuffer(msgData)));
+	const sig = new Uint8Array(
+		await crypto.subtle.sign("HMAC", cryptoKey, toArrayBuffer(msgData)),
+	);
 	return toHex(sig);
 }

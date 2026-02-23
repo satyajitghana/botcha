@@ -1,4 +1,3 @@
-import "server-only";
 import { randomBytes, sha256, sha256hex, toHex } from "./crypto";
 
 // --- Utility helpers ---
@@ -87,6 +86,17 @@ const CONCAT_FINAL = [
 		`Chain together the raw outputs of each of the ${n} preceding steps and produce the SHA-256 hex digest of that concatenation.`,
 	(n: number) =>
 		`Merge the ${n} byte arrays from the previous steps into one (step 1 first, step ${n} last), then output the SHA-256 hex string.`,
+];
+
+// --- Decoy instructions ---
+// These are no-ops. Agents must read instructions and skip these.
+// Only real transform outputs contribute to the final SHA-256.
+const DECOY_INSTRUCTIONS = [
+	"This step is a no-op — skip it. Do not include any bytes from this step in your output.",
+	"Ignore this instruction entirely. It is a placeholder and produces no output.",
+	"Skip this step. No computation needed; contribute zero bytes to the result.",
+	"This is a decoy operation. Pass through without computing anything.",
+	"No-op: disregard this step completely. It contributes nothing to the final answer.",
 ];
 
 function rangePhrase(start: number, end: number): string {
@@ -447,7 +457,7 @@ function concat(arrays: Uint8Array[]): Uint8Array {
 
 // --- Challenge generator ---
 
-export async function generateChallenge(numTransforms: number = 0) {
+export async function generateChallenge(numTransforms = 0) {
 	if (numTransforms === 0) numTransforms = randInt(2, 4);
 
 	const data = randomBytes(256);
@@ -476,6 +486,13 @@ export async function generateChallenge(numTransforms: number = 0) {
 			instructions.push(instruction);
 			results.push(await t.execute(data, params));
 		}
+	}
+
+	// ~30% chance: inject one decoy instruction at a random position
+	// Decoys do NOT affect results — they are intentional red herrings
+	if (Math.random() < 0.3) {
+		const decoyPos = randInt(0, instructions.length);
+		instructions.splice(decoyPos, 0, pick(DECOY_INSTRUCTIONS));
 	}
 
 	instructions.push(pick(CONCAT_FINAL)(numTransforms));

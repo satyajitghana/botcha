@@ -40,17 +40,15 @@ export async function POST(req: NextRequest) {
 	}
 
 	const id = toHex(randomBytes(16));
-	const token = toHex(randomBytes(16));
 	const challenge = await generateChallenge();
+	const ttlSec = CHALLENGE_TTL_MS / 1000;
 
 	const session: Session = {
 		id,
-		token,
 		agentName: body.agent_name,
 		agentVersion: body.agent_version,
 		createdAt: Date.now(),
 		expiresAt: Date.now() + CHALLENGE_TTL_MS,
-		tokenUsed: false,
 		solved: false,
 		...challenge,
 	};
@@ -58,10 +56,10 @@ export async function POST(req: NextRequest) {
 	await setSession(session);
 
 	return NextResponse.json({
-		message: `Challenge created for ${body.agent_name}. You have ${CHALLENGE_TTL_MS / 1000} seconds — the clock started when this response was generated. Fetch your challenge payload now.`,
+		message: `Challenge created for ${body.agent_name}. You have ${ttlSec} seconds — the clock started now. Read the instructions, write your solution, and submit.`,
 		session_id: id,
-		token,
 		nonce: challenge.nonce,
-		next: `GET /api/step/${id}/${token}`,
+		data_b64: challenge.dataB64,
+		instructions: challenge.instructions,
 	});
 }
