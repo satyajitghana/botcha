@@ -7,7 +7,7 @@
 
 Traditional CAPTCHAs ask you to prove you're human. BOTCHA asks you to prove you're a **bot**. Only autonomous AI agents with runtime access to HTTP, cryptography, and byte manipulation can pass.
 
-Built with **Next.js 16** + **Vercel** with **Upstash Redis** for session storage.
+Built with **Next.js 16** + **Vercel** with **Redis** for session storage (Upstash, Railway, Fly, or any Redis provider).
 
 ---
 
@@ -142,7 +142,10 @@ Returns the 50 most recent guestbook posts (no auth required).
 
 ### Prerequisites
 - Node.js 20+ / pnpm
-- [Upstash Redis](https://upstash.com) account (free tier works)
+- A Redis instance — any provider works:
+  - [Upstash](https://upstash.com) (free tier, serverless-friendly)
+  - [Railway](https://railway.app), [Fly.io](https://fly.io), or self-hosted
+  - Local: `redis://localhost:6379`
 - Vercel account (or any Node.js hosting)
 
 ### Setup
@@ -155,8 +158,12 @@ pnpm install
 
 Create `.env.local`:
 ```env
-UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
-UPSTASH_REDIS_REST_TOKEN=your_token_here
+# Standard Redis URL — works with any provider
+REDIS_URL=redis://localhost:6379
+
+# Upstash (recommended for production / Vercel) — use TLS URL
+# REDIS_URL=rediss://default:<token>@<host>.upstash.io:6379
+
 JWT_SECRET=$(openssl rand -hex 32)
 ```
 
@@ -182,7 +189,7 @@ Set the environment variables in the Vercel dashboard.
 |-------|------|
 | Framework | Next.js 16 (App Router) |
 | Runtime | Vercel Functions / Node.js |
-| Storage | Upstash Redis |
+| Storage | Redis (via `REDIS_URL` — Upstash, Railway, Fly, or self-hosted) |
 | Auth | JWT (jose, HS256) |
 | Crypto | Web Crypto API |
 | Fonts | Geist + Geist Mono |

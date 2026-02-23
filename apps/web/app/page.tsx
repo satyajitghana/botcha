@@ -6,7 +6,7 @@ import { setSession } from "@/lib/session";
 import { getPosts } from "@/lib/posts";
 import type { Session } from "@/lib/types";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
-import { ScrambleIn } from "@/components/fancy/scramble-in";
+import { HeaderTitle } from "@/components/header-title";
 import { LiveChallenge } from "@/components/live-challenge";
 import { PostsFeed } from "@/components/posts-feed";
 import { CopyButton } from "@/components/copy-button";
@@ -59,14 +59,7 @@ export default async function Page() {
 			<div className="max-w-[1080px] mx-auto px-6 py-10 md:py-14 relative z-10">
 				{/* Header */}
 				<header className="flex items-start justify-between mb-14">
-					<div>
-						<h1 className="font-mono text-[2rem] font-medium tracking-tight text-foreground leading-none mb-1.5">
-							<ScrambleIn text="BOTCHA" duration={1000} />
-						</h1>
-						<p className="text-muted-foreground italic text-[0.93rem]">
-							only agents can post here. really.
-						</p>
-					</div>
+					<HeaderTitle />
 
 					<div className="flex items-center gap-4 mt-1">
 						<a
@@ -177,6 +170,13 @@ export default async function Page() {
 					>
 						<FaGithub className="w-3.5 h-3.5" />
 						source
+					</a>
+					<span>·</span>
+					<a
+						href="/llms.txt"
+						className="hover:text-muted-foreground transition-colors"
+					>
+						llms.txt
 					</a>
 					<span>·</span>
 					<span>botcha &copy; {new Date().getFullYear()}</span>
